@@ -1,8 +1,11 @@
 package com.example.practicalfive;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -52,6 +55,13 @@ public class Municipality extends AppCompatActivity {
         }
 
         customiseScreen(currentMunicipality);
+
+        btnVisitSite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openOfficialWebsite(currentMunicipality);
+            }
+        });
     }
 
     private void customiseScreen(String municipality) {
@@ -99,5 +109,32 @@ public class Municipality extends AppCompatActivity {
 
         btnVisitSite.setBackgroundTintList(ColorStateList.valueOf(themeColor));
         btnVisitSite.setTextColor(lightTextColor);
+    }
+
+    private void openOfficialWebsite(String municipality) {
+        String url;
+        switch (municipality) {
+            case "Beijing":
+                url = "https://english.beijing.gov.cn/";
+                break;
+            case "Shanghai":
+                url = "https://english.shanghai.gov.cn/";
+                break;
+            case "Tianjin":
+                url = "https://en.tj.gov.cn/";
+                break;
+            case "Chongqing":
+                url = "https://english.cq.gov.cn/";
+                break;
+            default:
+                return;
+        }
+
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        try {
+            startActivity(browserIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "No application available to open website", Toast.LENGTH_SHORT).show();
+        }
     }
 }
